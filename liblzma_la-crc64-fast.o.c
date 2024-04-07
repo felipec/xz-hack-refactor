@@ -1476,15 +1476,15 @@ int64_t _Llzma_optimum_normal_0(uint64_t a1, uint64_t a2, int64_t a3, int64_t a4
         } else {
             // 0xce2
             if (a3 == 0) {
-                // break -> 0xd07
-                break;
+                // 0xd02
+                return 1;
             }
             // 0xce7
             v8 = *v4;
             v6 = v8;
             if (*(int64_t *)(v3 + 56) + v8 + *v5 == a3) {
-                // break -> 0xd07
-                break;
+                // 0xd02
+                return 1;
             }
         }
         // 0xcf7
@@ -1505,16 +1505,16 @@ int64_t _Llzma_optimum_normal_0(uint64_t a1, uint64_t a2, int64_t a3, int64_t a4
                 // 0xce2
                 result = 1;
                 if (a3 == 0) {
-                    // break -> 0xd07
-                    break;
+                    // 0xd02
+                    return 1;
                 }
                 // 0xce7
                 v8 = *v4;
                 v6 = v8;
                 result = 1;
                 if (*(int64_t *)(v3 + 56) + v8 + *v5 == a3) {
-                    // break -> 0xd07
-                    break;
+                    // 0xd02
+                    return 1;
                 }
             }
             // 0xcf7
