@@ -1733,13 +1733,13 @@ int64_t _Llzma_mt_block_size_1(uint64_t a1, uint64_t a2, int64_t * a3, int64_t a
                 if ((*(int32_t *)(v4 + 28) & -0xff0100) == 0x5000000) {
                     // 0xfc8
                     if (a4 == 0) {
-                        // break -> 0xfe7
-                        break;
+                        // 0xfe2
+                        return 1;
                     }
                     // 0xfcd
                     if (*v3 + *(int64_t *)(v4 + 8) + *(int64_t *)(v4 + 48) == a4) {
-                        // break -> 0xfe7
-                        break;
+                        // 0xfe2
+                        return 1;
                     }
                 }
             }
@@ -1760,14 +1760,14 @@ int64_t _Llzma_mt_block_size_1(uint64_t a1, uint64_t a2, int64_t * a3, int64_t a
                         // 0xfc8
                         result = 1;
                         if (a4 == 0) {
-                            // break -> 0xfe7
-                            break;
+                            // 0xfe2
+                            return 1;
                         }
                         // 0xfcd
                         result = 1;
                         if (*v3 + *(int64_t *)(v4 + 8) + *(int64_t *)(v4 + 48) == a4) {
-                            // break -> 0xfe7
-                            break;
+                            // 0xfe2
+                            return 1;
                         }
                     }
                 }
