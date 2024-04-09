@@ -1896,15 +1896,15 @@ int64_t _Llzma_simple_x86_decoder_init_1(uint64_t a1, uint64_t a2, int32_t a3, i
             if ((*(int32_t *)(v2 + 28) & -0xff0100) == 0x5000000) {
                 // 0x11b3
                 if (a4 == 0) {
-                    // break -> 0x11dc
-                    break;
+                    // 0x11d7
+                    return 1;
                 }
                 // 0x11b8
                 if (*(char *)(v2 + 17) % 2 != 0) {
                     // 0x11be
                     if (*v3 + *(int64_t *)(v2 + 48) + *(int64_t *)(v2 + 8) == a4) {
-                        // break -> 0x11dc
-                        break;
+                        // 0x11d7
+                        return 1;
                     }
                 }
             }
@@ -1923,16 +1923,16 @@ int64_t _Llzma_simple_x86_decoder_init_1(uint64_t a1, uint64_t a2, int32_t a3, i
                     // 0x11b3
                     result = 1;
                     if (a4 == 0) {
-                        // break -> 0x11dc
-                        break;
+                        // 0x11d7
+                        return 1;
                     }
                     // 0x11b8
                     if (*(char *)(v2 + 17) % 2 != 0) {
                         // 0x11be
                         result = 1;
                         if (*v3 + *(int64_t *)(v2 + 48) + *(int64_t *)(v2 + 8) == a4) {
-                            // break -> 0x11dc
-                            break;
+                            // 0x11d7
+                            return 1;
                         }
                     }
                 }
