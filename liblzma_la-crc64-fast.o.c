@@ -1553,13 +1553,13 @@ int64_t _Llzma_filters_update_0(uint64_t a1, uint64_t a2, int64_t a3, int64_t a4
                 // 0xd97
                 v5 = *(int32_t *)(v2 + 40);
                 if (v5 == 269) {
-                    // break -> 0xdc8
-                    break;
+                    // 0xdc3;
+                    return 1;
                 }
                 // 0xda1
                 if ((int32_t)a4 == 0 ? v5 == 265 : v5 == 267) {
-                    // break -> 0xdc8
-                    break;
+                    // 0xdc3;
+                    return 1;
                 }
             }
         }
@@ -1582,14 +1582,14 @@ int64_t _Llzma_filters_update_0(uint64_t a1, uint64_t a2, int64_t a3, int64_t a4
                     v5 = *(int32_t *)(v2 + 40);
                     result = 1;
                     if (v5 == 269) {
-                        // break -> 0xdc8
-                        break;
+                        // 0xdc3;
+                        return 1;
                     }
                     // 0xda1
                     result = 1;
                     if ((int32_t)a4 == 0 ? v5 == 265 : v5 == 267) {
-                        // break -> 0xdc8
-                        break;
+                        // 0xdc3;
+                        return 1;
                     }
                 }
             }
