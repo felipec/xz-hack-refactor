@@ -1629,8 +1629,8 @@ int64_t _Llzma_filters_update_1(uint64_t a1, uint64_t a2, int64_t a3, int32_t a4
                 // 0xe57
                 v5 = *(int32_t *)(v2 + 40);
                 if (a4 == 0 ? v5 == 265 : v5 == 267) {
-                    // break -> 0xe81
-                    break;
+                    // 0xe7c
+                    return 1;
                 }
             }
         }
@@ -1653,8 +1653,8 @@ int64_t _Llzma_filters_update_1(uint64_t a1, uint64_t a2, int64_t a3, int32_t a4
                     v5 = *(int32_t *)(v2 + 40);
                     result = 1;
                     if (a4 == 0 ? v5 == 265 : v5 == 267) {
-                        // break -> 0xe81
-                        break;
+                        // 0xe7c
+                        return 1;
                     }
                 }
             }
