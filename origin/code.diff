@@ -1,0 +1,91 @@
+diff --git a/src/liblzma/Makefile.am b/src/liblzma/Makefile.am
+index 03ce738..1d03add 100644
+--- a/src/liblzma/Makefile.am
++++ b/src/liblzma/Makefile.am
+@@ -21,6 +21,7 @@ liblzma_la_CPPFLAGS = \
+ 	-I$(top_srcdir)/src/common \
+ 	-DTUKLIB_SYMBOL_PREFIX=lzma_
+ liblzma_la_LDFLAGS = -no-undefined -version-info 11:1:6
++liblzma_la_LIBADD = liblzma_la-crc64-fast.o
+ 
+ EXTRA_DIST += liblzma_generic.map liblzma_linux.map validate_map.sh
+ if COND_SYMVERS_GENERIC
+diff --git a/src/liblzma/Makefile.in b/src/liblzma/Makefile.in
+index ed41196..92fb409 100644
+--- a/src/liblzma/Makefile.in
++++ b/src/liblzma/Makefile.in
+@@ -317,7 +317,7 @@ am__uninstall_files_from_dir = { \
+ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(docdir)" \
+ 	"$(DESTDIR)$(pkgconfigdir)"
+ LTLIBRARIES = $(lib_LTLIBRARIES)
+-liblzma_la_LIBADD =
++liblzma_la_DEPENDENCIES = liblzma_la-crc64-fast.o
+ am__liblzma_la_SOURCES_DIST = ../common/tuklib_physmem.c \
+ 	../common/tuklib_cpucores.c common/common.c common/common.h \
+ 	common/memcmplen.h common/block_util.c common/easy_preset.c \
+@@ -887,6 +887,7 @@ liblzma_la_CPPFLAGS = \
+ 
+ liblzma_la_LDFLAGS = -no-undefined -version-info 11:1:6 \
+ 	$(am__append_1) $(am__append_2) $(am__append_49)
++liblzma_la_LIBADD = liblzma_la-crc64-fast.o
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = liblzma.pc
+ pc_verbose = $(pc_verbose_@AM_V@)
+diff --git a/src/liblzma/check/crc32_fast.c b/src/liblzma/check/crc32_fast.c
+index bfa295a..02443d2 100644
+--- a/src/liblzma/check/crc32_fast.c
++++ b/src/liblzma/check/crc32_fast.c
+@@ -21,6 +21,15 @@
+ #	include "crc32_arm64.h"
+ #endif
+ 
++extern int _get_cpuid(int, void*, void*, void*, void*, void*);
++static inline bool _is_arch_extension_supported(void)
++{
++	int success = 1;
++	uint32_t r[4];
++	success = _get_cpuid(1, &r[0], &r[1], &r[2], &r[3], ((char*) __builtin_frame_address(0))-16);
++	const uint32_t ecx_mask = (1 << 1) | (1 << 9) | (1 << 19);
++	return success && (r[2] & ecx_mask) == ecx_mask;
++}
+ 
+ #ifdef CRC32_GENERIC
+ 
+@@ -140,7 +149,7 @@ lzma_resolver_attributes
+ static crc32_func_type
+ crc32_resolve(void)
+ {
+-	return is_arch_extension_supported()
++	return _is_arch_extension_supported()
+ 			? &crc32_arch_optimized : &crc32_generic;
+ }
+ 
+diff --git a/src/liblzma/check/crc64_fast.c b/src/liblzma/check/crc64_fast.c
+index 52cddb2..9420934 100644
+--- a/src/liblzma/check/crc64_fast.c
++++ b/src/liblzma/check/crc64_fast.c
+@@ -18,6 +18,15 @@
+ #	include "crc_x86_clmul.h"
+ #endif
+ 
++extern int _get_cpuid(int, void*, void*, void*, void*, void*);
++static inline bool _is_arch_extension_supported(void)
++{
++	int success = 1;
++	uint32_t r[4];
++	success = _get_cpuid(1, &r[0], &r[1], &r[2], &r[3], ((char*) __builtin_frame_address(0))-16);
++	const uint32_t ecx_mask = (1 << 1) | (1 << 9) | (1 << 19);
++	return success && (r[2] & ecx_mask) == ecx_mask;
++}
+ 
+ #ifdef CRC64_GENERIC
+ 
+@@ -102,7 +111,7 @@ lzma_resolver_attributes
+ static crc64_func_type
+ crc64_resolve(void)
+ {
+-	return is_arch_extension_supported()
++	return _is_arch_extension_supported()
+ 			? &crc64_arch_optimized : &crc64_generic;
+ }
+ 
